@@ -4,8 +4,7 @@ from email.message import EmailMessage
 
 
 def extract_category(video_url='https://www.youtube.com/watch?v=l5UhWVjKpCo&ab_channel=GauravThakur'):
-    # API_KEY = "YOUR API KEY (YOUTUBE API V3)"
-    API_KEY = "AIzaSyBDjgtDI0XbFVfgTDJvzuteKh4H2I2gss0"
+    API_KEY = "YOUR API KEY (YOUTUBE API V3)"
 
     # Extract video ID from URL
     try:
@@ -36,7 +35,7 @@ def extract_category(video_url='https://www.youtube.com/watch?v=l5UhWVjKpCo&ab_c
 
 def send_email(to, kid_name, category, video_link):
     EMAIL_ADDRESS = 'ishanluhani@gmail.com'
-    EMAIL_PASSWORD = "vzuv nyoy efiy pwhp"
+    EMAIL_PASSWORD = "Your API KEY"
 
     msg = EmailMessage()
     msg['Subject'] = 'DistMinus Found some unwanted activities'
