@@ -1,0 +1,53 @@
+
+.title {
+    font-size: 10vh;
+    font-weight: bold;
+    color: #b3d3f2;
+    text-align: center;
+}
+
+[data-testid="stImage"] {
+    display: block;
+    margin-left: auto;
+    margin-right: 0px;
+}
+
+.title_hr {
+    border: 1px solid black;
+}
+
+.sub_hr {
+    border: 1px solid white;
+}
+
+.hi {
+    font-size: 7vh;
+    font-weight: bold;
+    text-align: left;
+    margin-top: 4vh;
+    margin-left: 1vh;
+    display: inline-block;
+}
+
+.hi2 {
+    font-size: 6vh;
+    font-weight: bold;
+    text-align: left;
+    margin-top: 4vh;
+}
+
+.purple {
+    color: #4fa1f0;
+}
+
+.stButton >* {
+    padding: 10px;
+    padding-left: 120px;
+    padding-right: 120px;
+    margin-top: 30px;
+    border-color: #2196F3;
+    color: dodgerblue;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}

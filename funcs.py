@@ -21,16 +21,20 @@ def extract_category(video_url='https://www.youtube.com/watch?v=l5UhWVjKpCo&ab_c
         id=video_id
     ).execute()
 
-    # Extract video details
-    category_id = video_response["items"][0]["snippet"]["categoryId"]
+    # neglecting other sites
+    try:
+        # Extract video details
+        category_id = video_response["items"][0]["snippet"]["categoryId"]
 
-    category_response = youtube.videoCategories().list(
-        part="snippet",
-        id=category_id
-    ).execute()
-    category_name = category_response["items"][0]["snippet"]["title"]
+        category_response = youtube.videoCategories().list(
+            part="snippet",
+            id=category_id
+        ).execute()
+        category_name = category_response["items"][0]["snippet"]["title"]
 
-    return category_name
+        return category_name
+    except IndexError:
+        return None
 
 
 def send_email(to, kid_name, category, video_link):
@@ -61,14 +65,14 @@ def send_email(to, kid_name, category, video_link):
         <div id="email">
             <table role="presentation" width="100%">
                 <tr>
-                    <td bgcolor="purple" align="center" style="color: white;">
+                    <td bgcolor="dodgerblue" align="center" style="color: white;">
                         <h1>DistMinus</h1>
                     </td>
             </table>
             <table role="presentation" border="0" cellpadding="0" cellspacing="10px" style="padding: 30px 30px 30px 60px;">
                 <tr>
                     <td>
-                        <h2>{kid_name} is watching {category} Videos</h2>
+                        <h2>{kid_name} was watching {category} Videos, DistMinus Stopped it</h2>
                         <p>Video Link: {video_link}</p>
                     </td>
                 </tr>
@@ -106,5 +110,5 @@ if __name__ == '__main__':
     send_email(RECEIVERS_EMAIL_ID, 'Rahul', category, video_url)
     print('Mail sent')
 
-    send_sms(RECEIVERS_PHONE_NO, 'Rahul', category, category)
+    send_sms(RECEIVERS_PHONE_NO, 'Rahul', category, video_url)
     print('SMS Sent Successfully')

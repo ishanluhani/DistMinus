@@ -3,6 +3,8 @@ from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtWebEngineWidgets import *
 import sys
+import json
+import funcs
 
 
 # main window
@@ -103,7 +105,7 @@ class MainWindow(QMainWindow):
         self.show()
 
         # setting window title
-        self.setWindowTitle("Geek PyQt5")
+        self.setWindowTitle("DistMinus Browser")
 
     # method for adding new tab
     def add_new_tab(self, qurl=None, label="Blank"):
@@ -212,7 +214,20 @@ class MainWindow(QMainWindow):
 
         # set cursor position
         self.urlbar.setCursorPosition(0)
-        print(self.urlbar.text())
+
+        url = self.urlbar.text()
+        if 'www.youtube.com' in url:
+            data = json.load(open('internal_data/data.json'))
+            if data['focused_currently'] == 1:
+                category = funcs.extract_category(url)
+                print(category)
+                if category != 'Science and Technology' and category != 'Education' and category != None:
+                    funcs.send_email(data["parent email id"], data["name"], category, url)
+                    funcs.send_sms(data['parent phone no'], data["name"], category, url)
+                    url = url.replace('youtube', '404youtube')
+                    self.urlbar.setText(url)
+                    self.urlbar.setCursorPosition(0)
+                    self.navigate_to_url()
 
 
 # creating a PyQt5 application
