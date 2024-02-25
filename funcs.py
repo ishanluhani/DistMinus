@@ -1,11 +1,11 @@
+from credentials import *
 from googleapiclient.discovery import build
-import smtplib
 from email.message import EmailMessage
+from twilio.rest import Client
+import smtplib
 
 
 def extract_category(video_url='https://www.youtube.com/watch?v=l5UhWVjKpCo&ab_channel=GauravThakur'):
-    API_KEY = "YOUR API KEY (YOUTUBE API V3)"
-
     # Extract video ID from URL
     try:
         video_id = video_url.split("v=")[1].split("&")[0]
@@ -13,7 +13,7 @@ def extract_category(video_url='https://www.youtube.com/watch?v=l5UhWVjKpCo&ab_c
         video_id = video_url.split('/')[-1]
 
     # Build YouTube service
-    youtube = build("youtube", "v3", developerKey=API_KEY)
+    youtube = build("youtube", "v3", developerKey=YOUTUBE_API_KEY)
 
     # Get video details
     video_response = youtube.videos().list(
@@ -34,9 +34,6 @@ def extract_category(video_url='https://www.youtube.com/watch?v=l5UhWVjKpCo&ab_c
 
 
 def send_email(to, kid_name, category, video_link):
-    EMAIL_ADDRESS = 'ishanluhani@gmail.com'
-    EMAIL_PASSWORD = "Your API KEY"
-
     msg = EmailMessage()
     msg['Subject'] = 'DistMinus Found some unwanted activities'
     msg['From'] = EMAIL_ADDRESS
@@ -85,10 +82,29 @@ def send_email(to, kid_name, category, video_link):
         smtp.send_message(msg)
 
 
+def send_sms(to, child_name, category, video_link):
+    client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+
+    message = client.messages.create(
+        from_='+14152758275',
+        to=f'+91{to}',
+        body=f'''
+        DistMinus Found some unwanted activities
+
+        Your child {child_name} is found watching {category} videos when he is not supposed to.
+
+        Video link: {video_link}'''
+    )
+
+
 if __name__ == '__main__':
     video_url = 'https://www.youtube.com/watch?v=l5UhWVjKpCo&ab_channel=GauravThakur'
+    category = extract_category(video_url)
     print(f'Video Url = {video_url}')
-    print(f'Category = {extract_category(video_url)}')
+    print(f'Category = {category}')
 
-    send_email('neetuluhani@gmail.com', 'Rahul', 'Entertainment', 'https://www.youtube.com/watch?v=X7U2_tVejy0&ab_channel=GauravThakur')
+    send_email(RECEIVERS_EMAIL_ID, 'Rahul', category, video_url)
     print('Mail sent')
+
+    send_sms(RECEIVERS_PHONE_NO, 'Rahul', category, category)
+    print('SMS Sent Successfully')
